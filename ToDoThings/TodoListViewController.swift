@@ -10,8 +10,8 @@ import UIKit
 
 class TodoListViewController: UITableViewController
 {
-    
-    let itemArray = ["Find Eggs","LeafyVegatables","Chicken"]
+    var textField = UITextField()
+    var itemArray = ["Find Eggs","LeafyVegatables","Chicken"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,30 +41,36 @@ class TodoListViewController: UITableViewController
         
         tableView.cellForRow(at: indexPath)?.accessoryType = .none
         
-    }else{
+    }else
+    {
         tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
     }
-    
-    
-    
-    
     
     tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    // MARK - add new items
     
     
-    
-    
-    
-    
-    
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        let alert = UIAlertController(title: "Add items to TodoList", message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Add NewItem", style: .default) { (alert) in
+            //what should happen when user clicks the add button on our UIAlert
+            self.itemArray.append(self.textField.text!)
+            self.tableView.reloadData()
+            
+        }
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Create New Item"
+        self.textField = alertTextField
+            //print(alertTextField.text)
+        }
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
     }
-
+    
+    
+    
 
 }
 
