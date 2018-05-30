@@ -7,43 +7,18 @@
 //
 
 import UIKit
-
+import CoreData
 class TodoListViewController: UITableViewController
 {
     var textField = UITextField()
-    
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
-    
-    //let defaults = UserDefaults.standard
-    
-    
     var itemArray = [Item]()
-   // var itemArray = ["Find Eggs","LeafyVegatables","Chicken","Ben", "Ivy", "Jordell","Maxime","Shakia","William","periwinkle","rose","moss"]
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-       
-        
-        let newItem = Item()
-        newItem.title = "Find Mike"
-        itemArray.append(newItem)
-        
-        let newItem2 = Item()
-        newItem2.title = "Find dory"
-        itemArray.append(newItem2)
-        
-        let newItem3 = Item()
-        newItem3.title = "Find nemo"
-        itemArray.append(newItem3)
-        
-//        if let items = UserDefaults.standard.array(forKey: "TodoListArray") as? [Item]
-//        {
-//            itemArray = items
-//        }
-        
-        loadItems()
-        // Do any additional setup after loading the view, typically from a nib.
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+         loadItems()
     }
     
     //MARK - Tableview datasource methods
@@ -61,12 +36,6 @@ class TodoListViewController: UITableViewController
         //ternery operator we can write if conditions like this
         
         cell.accessoryType = itemArray[indexPath.row].done ? .checkmark : .none
-        
-//        if itemArray[indexPath.row].done == true{
-//            cell.accessoryType = .checkmark
-//        }else{
-//            cell.accessoryType = .none
-//        }
         return cell
     }
     
@@ -74,7 +43,11 @@ class TodoListViewController: UITableViewController
     
    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print(itemArray[indexPath.row])
-    itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+    
+    context.delete(itemArray[indexPath.row])
+    itemArray.remove(at: indexPath.row)
+    //itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+    saveItems()
     
     tableView.reloadData()
     tableView.deselectRow(at: indexPath, animated: true)
@@ -88,8 +61,9 @@ class TodoListViewController: UITableViewController
         let action = UIAlertAction(title: "Add NewItem", style: .default) { (alert) in
             //what should happen when user clicks the add button on our UIAlert
             
-            let newItem = Item()
+            let newItem = Item(context : self.context)
             newItem.title = self.textField.text!
+            newItem.done = false
             self.itemArray.append(newItem)
             self.saveItems()
             
@@ -109,31 +83,24 @@ class TodoListViewController: UITableViewController
     }
     
     func saveItems(){
-        let encoder = PropertyListEncoder()
         do{
-            let data = try encoder.encode(itemArray)
-            
-            try data.write(to: dataFilePath!)
+            try context.save()
         }catch
         {
-            print("error in encoding the file \(error)")
+            print("Error in saving the context \(error)")
         }
         
     }
     //loads the data everttime we close and open the app
     func loadItems(){
-        if let data = try? Data(contentsOf: dataFilePath!)
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        do{
+        itemArray = try context.fetch(request)
+        }catch
         {
-            let decoder = PropertyListDecoder()
-            do{
-                itemArray = try decoder.decode([Item].self, from: data)
-            }catch{
-                print("decoding Erroe \(error)")
-            }
+            print("Error in loading the data \(error)")
         }
-        
     }
-    
 
 }
 
