@@ -13,12 +13,21 @@ class TodoListViewController: UITableViewController
     var textField = UITextField()
     var itemArray = [Item]()
     
+    // this calls only when the selectedCategory in the categoryVC has some value
+    var selectedCategory: Categories? {
+        didSet{
+            loadItems()
+        }
+    }
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-         loadItems()
+        
+        // loadItems()
     }
     
     //MARK - Tableview datasource methods
@@ -59,17 +68,18 @@ class TodoListViewController: UITableViewController
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "Add items to TodoList", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add NewItem", style: .default) { (alert) in
+            
             //what should happen when user clicks the add button on our UIAlert
             
             let newItem = Item(context : self.context)
             newItem.title = self.textField.text!
             newItem.done = false
+            
+            //property parent category is came from the datamodel we are created to link the two entities
+            
+            newItem.parentCategory = self.selectedCategory
             self.itemArray.append(newItem)
             self.saveItems()
-            
-            
-        //self.defaults.set(self.itemArray, forKey: "TodoListArray")
-            
             self.tableView.reloadData()
             
         }
@@ -89,18 +99,44 @@ class TodoListViewController: UITableViewController
         {
             print("Error in saving the context \(error)")
         }
-        
     }
     //loads the data everttime we close and open the app
-    func loadItems(){
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(),predicate: NSPredicate? = nil){
+        
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        
+        
+        if let additionalPredicate = predicate{
+            
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,additionalPredicate])
+        } else{
+            request.predicate = categoryPredicate
+        }
         do{
         itemArray = try context.fetch(request)
         }catch
         {
             print("Error in loading the data \(error)")
         }
+        tableView.reloadData()
     }
-
 }
-
+//MARK:-
+extension TodoListViewController: UISearchBarDelegate{
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        loadItems(with: request, predicate: predicate)
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0{
+            loadItems()
+            DispatchQueue.main.async {
+                
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
+}
