@@ -8,8 +8,9 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class TodoListViewController: UITableViewController
+class TodoListViewController: SwipeTableViewController
 {
     var textField = UITextField()
     var itemArray: Results<Item>?
@@ -26,6 +27,8 @@ class TodoListViewController: UITableViewController
         super.viewDidLoad()
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        tableView.rowHeight = 80.0
+        navigationController?.navigationBar.barTintColor = UIColor(hexString: selectedCategory?.)
         
         // loadItems()
     }
@@ -39,11 +42,16 @@ class TodoListViewController: UITableViewController
   
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ListItem", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
         if let item = itemArray?[indexPath.row]
         {
         cell.textLabel?.text = itemArray?[indexPath.row].title
+            if let color  = FlatWhite().darken(byPercentage:CGFloat(indexPath.row) / CGFloat(itemArray!.count)){
+                cell.backgroundColor = color
+                cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+            }
         cell.accessoryType = item.done ? .checkmark : .none
         }else
         {
@@ -61,8 +69,10 @@ class TodoListViewController: UITableViewController
     if let items = itemArray?[indexPath.row]{
         do{
             try realm.write {
-            realm.delete(items)
-            //items.done = !items.done
+           // To delete
+             //   realm.delete(items)
+            //To checkmark
+            items.done = !items.done
             }
         }catch{
             print("Error saving done status \(error)")
@@ -118,24 +128,22 @@ class TodoListViewController: UITableViewController
    func loadItems(){
     
     itemArray = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
-//        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-//
-//
-//        if let additionalPredicate = predicate{
-//
-//            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,additionalPredicate])
-//        } else{
-//            request.predicate = categoryPredicate
-//        }
-//        do{
-//        itemArray = try context.fetch(request)
-//        }catch
-//        {
-//            print("Error in loading the data \(error)")
-//        }
         tableView.reloadData()
     }
+    override func updateDataModel(at indexPath: IndexPath) {
+        if let deletionItem = itemArray?[indexPath.row]{
+            do{
+                try realm.write {
+                    realm.delete(deletionItem)
+                }
+            }catch{
+                print("Error in deleting \(error)")
+            }
+        }
+    }
 }
+//MARK:- deletion using the swipetablevie and swipecell kit methods
+
 //MARK:-
 extension TodoListViewController: UISearchBarDelegate{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

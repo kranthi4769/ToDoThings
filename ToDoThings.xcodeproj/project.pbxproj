@@ -13,6 +13,7 @@
 		CE07CDE420BC235B000452B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE07CDE320BC235B000452B4 /* Assets.xcassets */; };
 		CE07CDE720BC235B000452B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE07CDE520BC235B000452B4 /* LaunchScreen.storyboard */; };
 		CE0E1AA720BFCA4B00748FA2 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E1AA620BFCA4B00748FA2 /* CategoryViewController.swift */; };
+		CE996F3E20C3E890002CA115 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE996F3D20C3E890002CA115 /* SwipeTableViewController.swift */; };
 		CEDD235F20C0270D00319537 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDD235E20C0270D00319537 /* Item.swift */; };
 		CEDD236120C0271E00319537 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDD236020C0271E00319537 /* Category.swift */; };
 		F80F7ED2EB99668FC6B73C0B /* Pods_ToDoThings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EBBF0BD8AA582EEAECEC87E /* Pods_ToDoThings.framework */; };
@@ -30,6 +31,7 @@
 		CE07CDE620BC235B000452B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE07CDE820BC235B000452B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE0E1AA620BFCA4B00748FA2 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		CE996F3D20C3E890002CA115 /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		CEDD235E20C0270D00319537 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		CEDD236020C0271E00319537 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,6 +110,7 @@
 			children = (
 				CE0E1AA620BFCA4B00748FA2 /* CategoryViewController.swift */,
 				CE07CDDE20BC235B000452B4 /* TodoListViewController.swift */,
+				CE996F3D20C3E890002CA115 /* SwipeTableViewController.swift */,
 			);
 			path = Viewcontrollers;
 			sourceTree = "<group>";
@@ -158,7 +161,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = Kranthikiran;
 				TargetAttributes = {
 					CE07CDD820BC235B000452B4 = {
@@ -224,13 +227,17 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ToDoThings/Pods-ToDoThings-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeCellKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -248,6 +255,7 @@
 				CE0E1AA720BFCA4B00748FA2 /* CategoryViewController.swift in Sources */,
 				CE07CDDF20BC235B000452B4 /* TodoListViewController.swift in Sources */,
 				CE07CDDD20BC235B000452B4 /* AppDelegate.swift in Sources */,
+				CE996F3E20C3E890002CA115 /* SwipeTableViewController.swift in Sources */,
 				CEDD236120C0271E00319537 /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -288,6 +296,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -295,6 +304,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -345,6 +355,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -352,6 +363,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
