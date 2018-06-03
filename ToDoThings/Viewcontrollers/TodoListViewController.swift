@@ -27,9 +27,7 @@ class TodoListViewController: SwipeTableViewController
         super.viewDidLoad()
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        tableView.rowHeight = 80.0
-        navigationController?.navigationBar.barTintColor = UIColor(hexString: selectedCategory?.)
-        
+        tableView.rowHeight = 80.0        
         // loadItems()
     }
     
